@@ -111,6 +111,35 @@ exports.getOriginalUrl = async (req, res, next) => {
   }
 };
 
+exports.getHash = async (req, res, next) => {
+  try {
+    const { hash } = req.params;
+
+    if (!hash) {
+      res.status(400);
+      throw new Error('No hash provided');
+    }
+
+    const existingHash = await URLHash.findOne({
+      hash,
+    });
+
+    if (!existingHash) {
+      res.status(404);
+      throw new Error('No original URL present for this hash');
+    }
+
+    return res.json({
+      ok: true,
+      data: {
+        hash: existingHash,
+      },
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 exports.getAllHashes = async (req, res, next) => {
   try {
     const hashes = await URLHash.find();

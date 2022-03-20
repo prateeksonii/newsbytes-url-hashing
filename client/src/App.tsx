@@ -10,6 +10,7 @@ import {
 import { privateApi } from "./api";
 import loggedInAtom from "./atoms/loggedInAtom";
 import Dashboard from "./pages/Dashboard";
+import DashboardLink from "./pages/dashboard/Link";
 import Home from "./pages/Home";
 
 const PublicRoute: FC = () => {
@@ -62,7 +63,10 @@ const App: FC = () => {
           <Route path="/" element={<Home />} />
         </Route>
         <Route path="/dashboard" element={<PrivateRoute />}>
-          <Route path="" element={<Dashboard />} />
+          <Route path="" element={<Dashboard />}>
+            <Route path="link" element={<DashboardLink />} />
+            <Route path="link/:hash" element={<DashboardLink />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
