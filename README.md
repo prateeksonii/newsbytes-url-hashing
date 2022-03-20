@@ -9,4 +9,8 @@ Release plan defined in [RELEASES.md](./RELEASES.md)
 
 - NodeJS with Express
 - MongoDB with Mongoose
-- UUID v4
+- NanoID
+- React with Vite
+- TailwindCSS
+- Jotai
+- React Query

@@ -11,3 +11,11 @@
 - Ability to edit hashes
 
 > Completed at ~6 PM, 20th March, 2022
+
+# Release 1.0.2
+
+- Add complete frontend with React and Vite (check client/)
+- Add ability to delete links
+- Change UUID to Nanoid for smaller hashes
+
+> Completed at ~9 PM, 20th March, 2022
