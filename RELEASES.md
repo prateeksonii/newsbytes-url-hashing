@@ -10,4 +10,4 @@
 - Add JWT Authentication to protect routes
 - Ability to edit hashes
 
-> Completed at ~5 PM, 20th March, 2022
+> Completed at ~6 PM, 20th March, 2022
