@@ -19,12 +19,9 @@ exports.createURLHash = async (req, res, next) => {
       throw new Error('Original URL provided already exists');
     }
 
-    const baseUrl = `${req.protocol}://${req.get('host')}`;
-    const hashedUrl = `${baseUrl}/h/${v4()}`;
-
     const newHash = new URLHash({
       originalUrl,
-      hashedUrl,
+      hash: v4(),
     });
 
     await newHash.save();
@@ -33,6 +30,52 @@ exports.createURLHash = async (req, res, next) => {
       ok: true,
       data: {
         hash: newHash,
+      },
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+exports.editURLHash = async (req, res, next) => {
+  try {
+    const { url, hash } = req.body;
+
+    const { hash: originalHash } = req.params;
+
+    if (!originalHash) {
+      res.status(400);
+      throw new Error('No hash provided');
+    }
+
+    if (!url && !hash) {
+      res.status(400);
+      throw new Error('No field provided to update');
+    }
+
+    const existingHash = await URLHash.findOne({
+      hash: originalHash,
+    });
+
+    if (!existingHash) {
+      res.status(404);
+      throw new Error('Hash not found');
+    }
+
+    if (url) {
+      existingHash.originalUrl = url;
+    }
+
+    if (hash) {
+      existingHash.hash = hash;
+    }
+
+    await existingHash.save();
+
+    return res.status(200).json({
+      ok: true,
+      data: {
+        hash: existingHash,
       },
     });
   } catch (err) {
@@ -49,11 +92,8 @@ exports.getOriginalUrl = async (req, res, next) => {
       throw new Error('No hash provided');
     }
 
-    const baseUrl = `${req.protocol}://${req.get('host')}`;
-    const hashedUrl = `${baseUrl}/h/${hash}`;
-
     const existingHash = await URLHash.findOne({
-      hashedUrl,
+      hash,
     });
 
     if (!existingHash) {
