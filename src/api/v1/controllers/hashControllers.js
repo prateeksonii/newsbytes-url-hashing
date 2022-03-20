@@ -83,6 +83,27 @@ exports.editURLHash = async (req, res, next) => {
   }
 };
 
+exports.deleteURLHash = async (req, res, next) => {
+  try {
+    const { hash } = req.params;
+
+    if (!hash) {
+      res.status(400);
+      throw new Error('No hash provided');
+    }
+
+    await URLHash.deleteOne({
+      hash,
+    });
+
+    return res.status(200).json({
+      ok: true,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 exports.getOriginalUrl = async (req, res, next) => {
   try {
     const { hash } = req.params;

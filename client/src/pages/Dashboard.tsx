@@ -1,15 +1,10 @@
-import { Children, FC, useRef, useState } from "react";
+import { Children, FC } from "react";
 import { useQuery } from "react-query";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { toast } from "react-toastify";
 import { privateApi } from "../api";
-import LinkForm from "../components/LinkForm";
 
 const Dashboard: FC = () => {
-  const navigate = useNavigate();
-
-  const [selectedHash, setSelectedHash] = useState<any>();
-
   const {
     data: hashes,
     isError,
@@ -20,6 +15,12 @@ const Dashboard: FC = () => {
 
     return res.data.data.hashes;
   });
+
+  const onDelete = async (hash: string) => {
+    await privateApi.delete(`/api/v1/hash/${hash}`);
+    toast.success("Link deleted");
+    refetch();
+  };
 
   return (
     <div className="px-8 md:px-0 py-10 max-w-[80%] mx-auto">
@@ -64,12 +65,20 @@ const Dashboard: FC = () => {
                       <a href={hash.originalUrl}>{hash.originalUrl}</a>
                     </div>
                     <div className="text-lg break-words">{hash.clicks}</div>
-                    <Link
-                      to={`link/${hash.hash}`}
-                      className="text-lg w-max bg-primary py-2 px-4 rounded"
-                    >
-                      Edit
-                    </Link>
+                    <div className="flex items-center gap-4">
+                      <Link
+                        to={`link/${hash.hash}`}
+                        className="text-lg w-max bg-primary py-2 px-4 rounded grid place-items-center"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        className="text-lg w-max bg-red-500 py-2 px-4 rounded grid place-items-center"
+                        onClick={() => onDelete(hash.hash)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </>
                 ))
               )}
