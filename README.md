@@ -14,3 +14,4 @@ Release plan defined in [RELEASES.md](./RELEASES.md)
 - TailwindCSS
 - Jotai
 - React Query
+- Swagger
