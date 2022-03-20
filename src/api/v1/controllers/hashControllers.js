@@ -1,4 +1,4 @@
-const { v4 } = require('uuid');
+const { nanoid } = require('nanoid');
 const URLHash = require('../models/URLHash');
 
 exports.createURLHash = async (req, res, next) => {
@@ -21,7 +21,7 @@ exports.createURLHash = async (req, res, next) => {
 
     const newHash = new URLHash({
       originalUrl,
-      hash: v4(),
+      hash: nanoid(),
     });
 
     await newHash.save();
