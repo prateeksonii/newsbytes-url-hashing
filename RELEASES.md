@@ -19,3 +19,7 @@
 - Change UUID to Nanoid for smaller hashes
 
 > Completed at ~9 PM, 20th March, 2022
+
+# Release 1.0.3
+
+- Add Swagger API Doc
