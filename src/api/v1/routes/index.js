@@ -1,8 +1,8 @@
 const express = require('express');
-const { createURLHash } = require('../controllers');
+const hashRouter = require('./hashRouter');
 
 const router = express.Router();
 
-router.post('/hash', createURLHash);
+router.use('/hash', hashRouter);
 
 module.exports = router;
