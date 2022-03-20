@@ -1,4 +1,6 @@
-# Release 1.0 (WIP)
+# Release 1.0
 
 - A basic API to hash urls and store them in MongoDB along with necessary information
-- Hashing will be done using UUID v4
+- Hashing done using UUID v4
+
+> Completed at ~5 PM, 20th March, 2022

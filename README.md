@@ -7,3 +7,5 @@ Release plan defined in [RELEASES.md](./RELEASES.md)
 ## Tech Stack
 
 - NodeJS with Express
+- MongoDB with Mongoose
+- UUID v4
