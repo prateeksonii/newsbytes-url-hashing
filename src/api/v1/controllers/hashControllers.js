@@ -1,4 +1,4 @@
-const { v4 } = require('uuid');
+const { nanoid } = require('nanoid');
 const URLHash = require('../models/URLHash');
 
 exports.createURLHash = async (req, res, next) => {
@@ -21,7 +21,7 @@ exports.createURLHash = async (req, res, next) => {
 
     const newHash = new URLHash({
       originalUrl,
-      hash: v4(),
+      hash: nanoid(),
     });
 
     await newHash.save();
@@ -83,6 +83,27 @@ exports.editURLHash = async (req, res, next) => {
   }
 };
 
+exports.deleteURLHash = async (req, res, next) => {
+  try {
+    const { hash } = req.params;
+
+    if (!hash) {
+      res.status(400);
+      throw new Error('No hash provided');
+    }
+
+    await URLHash.deleteOne({
+      hash,
+    });
+
+    return res.status(200).json({
+      ok: true,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 exports.getOriginalUrl = async (req, res, next) => {
   try {
     const { hash } = req.params;
@@ -106,6 +127,35 @@ exports.getOriginalUrl = async (req, res, next) => {
     await existingHash.save();
 
     return res.redirect(existingHash.originalUrl);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+exports.getHash = async (req, res, next) => {
+  try {
+    const { hash } = req.params;
+
+    if (!hash) {
+      res.status(400);
+      throw new Error('No hash provided');
+    }
+
+    const existingHash = await URLHash.findOne({
+      hash,
+    });
+
+    if (!existingHash) {
+      res.status(404);
+      throw new Error('No original URL present for this hash');
+    }
+
+    return res.json({
+      ok: true,
+      data: {
+        hash: existingHash,
+      },
+    });
   } catch (err) {
     return next(err);
   }

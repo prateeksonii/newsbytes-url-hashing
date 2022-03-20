@@ -38,26 +38,61 @@ exports.login = async (req, res, next) => {
 };
 
 exports.isAuthenticated = (req, res, next) => {
-  const { authorization } = req.headers;
+  try {
+    const { authorization } = req.headers;
 
-  if (!authorization) {
-    res.status(401);
-    throw new Error('No token provided');
+    if (!authorization) {
+      res.status(401);
+      throw new Error('No token provided');
+    }
+
+    const [, token] = authorization.split(' ');
+
+    if (!token) {
+      res.status(401);
+      throw new Error('Invalid token provided');
+    }
+
+    const isValid = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!isValid) {
+      res.status(401);
+      throw new Error('Invalid token provided');
+    }
+
+    return next();
+  } catch (err) {
+    return next(err);
   }
+};
 
-  const [, token] = authorization.split(' ');
+exports.checkAuthStatus = (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
 
-  if (!token) {
-    res.status(401);
-    throw new Error('Invalid token provided');
+    if (!authorization) {
+      res.status(401);
+      throw new Error('No token provided');
+    }
+
+    const [, token] = authorization.split(' ');
+
+    if (!token) {
+      res.status(401);
+      throw new Error('Invalid token provided');
+    }
+
+    const isValid = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (!isValid) {
+      res.status(401);
+      throw new Error('Invalid token provided');
+    }
+
+    return res.json({
+      ok: true,
+    });
+  } catch (err) {
+    return next(err);
   }
-
-  const isValid = jwt.verify(token, process.env.JWT_SECRET);
-
-  if (!isValid) {
-    res.status(401);
-    throw new Error('Invalid token provided');
-  }
-
-  return next();
 };

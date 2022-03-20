@@ -4,10 +4,6 @@ const urlHashSchema = new mongoose.Schema({
   originalUrl: {
     type: String,
     required: [true, 'Original URL is required'],
-    validate: {
-      validator: (value) => /^https?:\/\/\w+(\.\w+)*(:[0-9]+)?(\/.*)?$/.test(value),
-      message: 'Invalid URL value',
-    },
     unique: [true, 'Original URL already exists'],
   },
   hash: {
